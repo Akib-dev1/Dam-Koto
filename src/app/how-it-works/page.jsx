@@ -222,9 +222,9 @@ const HowItWorksPage = () => {
 
             <div className="lg:col-span-8">
               <p className="max-w-2xl text-base leading-relaxed text-neutral-600">
-                Prices can vary depending on market, location, product quality,
-                availability, and time. Published government prices are
-                benchmarks, not guaranteed selling prices.
+                Prices are updated daily using market price reports published by
+                the Trading Corporation of Bangladesh (TCB). This information is
+                provided for reference and reflects the prices reported by TCB.
               </p>
 
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-neutral-500">
