@@ -401,9 +401,13 @@ const PriceDirectory = ({ items = [], communityReports = [] }) => {
                       </p>
 
                       <p className="mt-1 text-lg font-semibold tracking-tight">
-                        {item.community_avg == null
-                          ? "—"
-                          : `৳${item.community_avg}`}
+                        {(() => {
+                          const report = communityReports.find(
+                            (report) => report.commodity === item.item,
+                          );
+
+                          return report ? `৳${report.average}` : "—";
+                        })()}
                       </p>
                     </div>
                   </td>
