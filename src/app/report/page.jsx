@@ -1,5 +1,14 @@
 import ReportPriceForm from "@/components/ReportPriceForm";
 
+export const metadata = {
+  title: "Market Price Reports",
+  description:
+    "Explore Bangladesh market price reports, commodity price trends, and historical data. Understand how essential goods prices change over time.",
+  alternates: {
+    canonical: "/report",
+  },
+};
+
 const sampleItems = [
   {
     row_key: "2026-10-19|চাল সরু (নাজির/মিনিকেট)|প্রতি কেজি",

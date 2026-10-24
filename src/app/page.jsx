@@ -3,6 +3,15 @@ import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 import { getDB } from "./lib/mongodb";
 
+export const metadata = {
+  title: "Today's Market Prices in Bangladesh | DamKoto",
+  description:
+    "Find today's prices of 60 essential commodities in Bangladesh. Explore updated market rates and historical price comparisons.",
+  alternates: {
+    canonical: "/",
+  },
+};
+
 const getPrices = async () => {
   "use cache";
   const db = await getDB();

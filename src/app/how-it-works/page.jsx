@@ -7,6 +7,15 @@ import {
   FiArrowRight,
 } from "react-icons/fi";
 
+export const metadata = {
+  title: "How It Works",
+  description:
+    "Learn how DamKoto collects, organizes, and presents Bangladesh market prices, historical comparisons, and commodity price reports.",
+  alternates: {
+    canonical: "/how-it-works",
+  },
+};
+
 const steps = [
   {
     number: "01",
