@@ -179,10 +179,7 @@ const PriceDirectory = ({ items = [], communityReports = [] }) => {
                 >
                   {/* Commodity */}
                   <td className="py-7 pr-4">
-                    <Link
-                      href={`/items/${encodeURIComponent(item.item_en)}`}
-                      className="block"
-                    >
+                    <span className="block">
                       <div className="flex items-start gap-4">
                         <span className="pt-1 text-xs text-[#999999]">
                           {index + 1}
@@ -198,7 +195,7 @@ const PriceDirectory = ({ items = [], communityReports = [] }) => {
                           </p>
                         </div>
                       </div>
-                    </Link>
+                    </span>
                   </td>
 
                   {/* Current Price */}
@@ -214,10 +211,7 @@ const PriceDirectory = ({ items = [], communityReports = [] }) => {
 
                   {/* Weekly Range */}
                   <td className="py-7 pr-4">
-                    <Link
-                      href={`/items/${encodeURIComponent(item.item_en)}`}
-                      className="inline-flex items-center gap-2"
-                    >
+                    <span className="inline-flex items-center gap-2">
                       <span className="text-xl font-medium tracking-tighter tabular-nums lg:text-2xl">
                         ৳{item.week_min}–{item.week_max}
                       </span>
@@ -226,15 +220,12 @@ const PriceDirectory = ({ items = [], communityReports = [] }) => {
                         size={17}
                         className="shrink-0 text-[#999999] transition-all duration-200 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-black"
                       />
-                    </Link>
+                    </span>
                   </td>
 
                   {/* People Paying Average */}
                   <td className="py-7 pr-4">
-                    <Link
-                      href={`/items/${encodeURIComponent(item.item_en)}`}
-                      className="inline-flex items-center gap-2"
-                    >
+                    <span className="inline-flex items-center gap-2">
                       <span className="text-3xl font-medium tracking-tighter tabular-nums">
                         {(() => {
                           const report = communityReports.find(
@@ -249,7 +240,7 @@ const PriceDirectory = ({ items = [], communityReports = [] }) => {
                         size={17}
                         className="shrink-0 text-[#999999] transition-all duration-200 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-black"
                       />
-                    </Link>
+                    </span>
                   </td>
 
                   {/* Movement */}
@@ -337,7 +328,7 @@ const PriceDirectory = ({ items = [], communityReports = [] }) => {
               return (
                 <tr key={item.row_key} className="border-b border-[#E5E5E5]">
                   <td className="py-6 pr-2 align-top">
-                    <Link href={`/items/${encodeURIComponent(item.item_en)}`}>
+                    <span>
                       <p className="text-base font-semibold leading-tight">
                         {language === "bn" ? item.item : item.item_en}
                       </p>
@@ -351,14 +342,11 @@ const PriceDirectory = ({ items = [], communityReports = [] }) => {
                       <p className="mt-1 text-sm font-medium">
                         ৳{item.week_min}–{item.week_max}
                       </p>
-                    </Link>
+                    </span>
                   </td>
 
                   <td className="py-6 text-right align-top">
-                    <Link
-                      href={`/items/${encodeURIComponent(item.item_en)}`}
-                      className="inline-flex items-center justify-end gap-1"
-                    >
+                    <span className="inline-flex items-center justify-end gap-1">
                       <span className="text-xl font-medium leading-none tracking-tighter tabular-nums sm:text-2xl">
                         ৳{item.price_min}–{item.price_max}
                       </span>
@@ -367,7 +355,7 @@ const PriceDirectory = ({ items = [], communityReports = [] }) => {
                         size={15}
                         className="shrink-0 text-[#6B6B6B]"
                       />
-                    </Link>
+                    </span>
 
                     <div className="mt-3 flex flex-wrap justify-end gap-x-3 gap-y-1">
                       <span
