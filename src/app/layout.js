@@ -1,6 +1,8 @@
 import { Hind_Siliguri, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { LanguageProvider } from "@/components/LanguageContext";
+import Footer from "@/components/Footer";
 
 const hindSiliguri = Hind_Siliguri({
   subsets: ["latin", "bengali"],
@@ -26,8 +28,11 @@ export default function RootLayout({ children }) {
       className={`${hindSiliguri.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full font-ibm flex flex-col">
-        <Navbar />
-        {children}
+        <LanguageProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

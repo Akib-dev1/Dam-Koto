@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { HiOutlineLanguage } from "react-icons/hi2";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import { GoDotFill } from "react-icons/go";
+import { useLanguage } from "./LanguageContext";
 
 const navLinks = [
   { href: "/", bn: "আজকের দাম", en: "Today's Prices" },
@@ -14,12 +15,13 @@ const navLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [language, setLanguage] = useState("bn");
+  const { language, setLang } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
+
   const isBangla = language === "bn";
 
   const toggleLanguage = () => {
-    setLanguage((prev) => (prev === "bn" ? "en" : "bn"));
+    setLang(isBangla ? "en" : "bn");
   };
 
   const isActiveLink = (href) => {

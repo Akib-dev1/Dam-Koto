@@ -1,4 +1,5 @@
 import { getDB } from "@/app/lib/mongodb";
+import { revalidatePath } from "next/cache";
 
 export const POST = async (req) => {
   try {
@@ -19,7 +20,7 @@ export const POST = async (req) => {
         { _id: "Data01", items },
         { upsert: true },
       );
-
+    revalidatePath("/"); // Revalidate the home page after updating prices
     return Response.json({
       success: true,
       message: "Prices updated successfully",

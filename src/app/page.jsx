@@ -1,170 +1,21 @@
 import PriceDirectory from "@/components/PriceDirectory";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
+import { getDB } from "./lib/mongodb";
 
-const sampleItems = [
-  {
-    row_key: "2026-10-19|চাল সরু (নাজির/মিনিকেট)|প্রতি কেজি",
-    report_date: "2026-10-19",
-    category: "চাল",
-    item: "চাল সরু (নাজির/মিনিকেট)",
-    unit: "প্রতি কেজি",
-    price_min: 70,
-    price_max: 85,
-    week_min: 70,
-    week_max: 85,
-    month_min: 70,
-    month_max: 85,
-    year_min: 72,
-    year_max: 85,
-  },
-  {
-    row_key: "2026-10-19|চাল মাঝারি|প্রতি কেজি",
-    report_date: "2026-10-19",
-    category: "চাল",
-    item: "চাল মাঝারি",
-    unit: "প্রতি কেজি",
-    price_min: 58,
-    price_max: 65,
-    week_min: 58,
-    week_max: 65,
-    month_min: 56,
-    month_max: 64,
-    year_min: 55,
-    year_max: 62,
-  },
-  {
-    row_key: "2026-10-19|আটা (খোলা)|প্রতি কেজি",
-    report_date: "2026-10-19",
-    category: "আটা ও ময়দা",
-    item: "আটা (খোলা)",
-    unit: "প্রতি কেজি",
-    price_min: 42,
-    price_max: 48,
-    week_min: 43,
-    week_max: 49,
-    month_min: 44,
-    month_max: 50,
-    year_min: 45,
-    year_max: 52,
-  },
-  {
-    row_key: "2026-10-19|সয়াবিন তেল (বোতল)|প্রতি লিটার",
-    report_date: "2026-10-19",
-    category: "তেল",
-    item: "সয়াবিন তেল (বোতল)",
-    unit: "প্রতি লিটার",
-    price_min: 175,
-    price_max: 185,
-    week_min: 175,
-    week_max: 185,
-    month_min: 170,
-    month_max: 180,
-    year_min: 165,
-    year_max: 175,
-  },
-  {
-    row_key: "2026-10-19|মসুর ডাল|প্রতি কেজি",
-    report_date: "2026-10-19",
-    category: "ডাল",
-    item: "মসুর ডাল",
-    unit: "প্রতি কেজি",
-    price_min: 125,
-    price_max: 135,
-    week_min: 120,
-    week_max: 130,
-    month_min: 120,
-    month_max: 130,
-    year_min: 115,
-    year_max: 125,
-  },
-  {
-    row_key: "2026-10-19|পেঁয়াজ (দেশি)|প্রতি কেজি",
-    report_date: "2026-10-19",
-    category: "সবজি",
-    item: "পেঁয়াজ (দেশি)",
-    unit: "প্রতি কেজি",
-    price_min: 65,
-    price_max: 75,
-    week_min: 70,
-    week_max: 80,
-    month_min: 60,
-    month_max: 70,
-    year_min: 55,
-    year_max: 65,
-  },
-  {
-    row_key: "2026-10-19|আলু|প্রতি কেজি",
-    report_date: "2026-10-19",
-    category: "সবজি",
-    item: "আলু",
-    unit: "প্রতি কেজি",
-    price_min: 30,
-    price_max: 35,
-    week_min: 30,
-    week_max: 35,
-    month_min: 35,
-    month_max: 40,
-    year_min: 40,
-    year_max: 45,
-  },
-  {
-    row_key: "2026-10-19|ডিম (ফার্ম)|প্রতি হালি",
-    report_date: "2026-10-19",
-    category: "ডিম",
-    item: "ডিম (ফার্ম)",
-    unit: "প্রতি হালি",
-    price_min: 46,
-    price_max: 50,
-    week_min: 44,
-    week_max: 48,
-    month_min: 42,
-    month_max: 46,
-    year_min: 45,
-    year_max: 50,
-  },
-  {
-    row_key: "2026-10-19|ব্রয়লার মুরগি|প্রতি কেজি",
-    report_date: "2026-10-19",
-    category: "মাংস",
-    item: "ব্রয়লার মুরগি",
-    unit: "প্রতি কেজি",
-    price_min: 175,
-    price_max: 190,
-    week_min: 180,
-    week_max: 195,
-    month_min: 170,
-    month_max: 185,
-    year_min: 160,
-    year_max: 180,
-  },
-  {
-    row_key: "2026-10-19|চিনি|প্রতি কেজি",
-    report_date: "2026-10-19",
-    category: "চিনি",
-    item: "চিনি",
-    unit: "প্রতি কেজি",
-    price_min: 110,
-    price_max: 120,
-    week_min: 110,
-    week_max: 120,
-    month_min: 115,
-    month_max: 125,
-    year_min: 120,
-    year_max: 130,
-  },
-];
+const getPrices = async () => {
+  "use cache";
+  const db = await getDB();
 
-// Demo values except the first record, which is user-provided.
-async function getPrices() {
-  // Replace with your database or API call.
-  return {
-    items: sampleItems,
-  };
-}
+  const data = await db.collection("prices").findOne({
+    _id: "Data01",
+  });
+
+  return data?.items || [];
+};
 
 export default async function HomePage() {
-  const { items } = await getPrices();
+  const items = await getPrices();
 
   const latestDate = items.reduce(
     (latest, item) => (item.report_date > latest ? item.report_date : latest),

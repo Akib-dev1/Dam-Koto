@@ -11,16 +11,19 @@ import {
   FiArrowRight,
   FiX,
 } from "react-icons/fi";
+import { useLanguage } from "./LanguageContext";
 
 const PriceDirectory = ({ items = [] }) => {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("default");
+  const { language } = useLanguage();
 
   const filteredItems = items
     .filter(
       (item) =>
-        item.item.toLowerCase().includes(search.toLowerCase()) ||
-        item.category.toLowerCase().includes(search.toLowerCase()),
+        item.item_en.toLowerCase().includes(search.toLowerCase()) ||
+        item.category.toLowerCase().includes(search.toLowerCase()) ||
+        item.item.toLowerCase().includes(search.toLowerCase()),
     )
     .sort((a, b) => {
       if (sortBy === "name") return a.item.localeCompare(b.item, "bn");
@@ -185,7 +188,7 @@ const PriceDirectory = ({ items = [] }) => {
                   {/* Commodity */}
                   <td className="py-7 pr-4">
                     <Link
-                      href={`/items/${encodeURIComponent(item.row_key)}`}
+                      href={`/items/${encodeURIComponent(item.item_en)}`}
                       className="block"
                     >
                       <div className="flex items-start gap-4">
@@ -195,7 +198,7 @@ const PriceDirectory = ({ items = [] }) => {
 
                         <div>
                           <p className="text-base font-semibold tracking-tight">
-                            {item.item}
+                            {language === "bn" ? item.item : item.item_en}
                           </p>
 
                           <p className="mt-1 text-xs text-[#6B6B6B]">
@@ -220,7 +223,7 @@ const PriceDirectory = ({ items = [] }) => {
                   {/* Weekly Range */}
                   <td className="py-7 pr-4">
                     <Link
-                      href={`/items/${encodeURIComponent(item.row_key)}`}
+                      href={`/items/${encodeURIComponent(item.item_en)}`}
                       className="inline-flex items-center gap-2"
                     >
                       <span className="text-xl font-medium tracking-tighter tabular-nums lg:text-2xl">
@@ -237,7 +240,7 @@ const PriceDirectory = ({ items = [] }) => {
                   {/* People Paying Average */}
                   <td className="py-7 pr-4">
                     <Link
-                      href={`/items/${encodeURIComponent(item.row_key)}`}
+                      href={`/items/${encodeURIComponent(item.item_en)}`}
                       className="inline-flex items-center gap-2"
                     >
                       <span className="text-3xl font-medium tracking-tighter tabular-nums">
@@ -338,9 +341,9 @@ const PriceDirectory = ({ items = [] }) => {
               return (
                 <tr key={item.row_key} className="border-b border-[#E5E5E5]">
                   <td className="py-6 pr-2 align-top">
-                    <Link href={`/items/${encodeURIComponent(item.row_key)}`}>
+                    <Link href={`/items/${encodeURIComponent(item.item_en)}`}>
                       <p className="text-base font-semibold leading-tight">
-                        {item.item}
+                        {language === "bn" ? item.item : item.item_en}
                       </p>
 
                       <p className="mt-1 text-xs text-[#6B6B6B]">{item.unit}</p>
@@ -357,7 +360,7 @@ const PriceDirectory = ({ items = [] }) => {
 
                   <td className="py-6 text-right align-top">
                     <Link
-                      href={`/items/${encodeURIComponent(item.row_key)}`}
+                      href={`/items/${encodeURIComponent(item.item_en)}`}
                       className="inline-flex items-center justify-end gap-1"
                     >
                       <span className="text-xl font-medium leading-none tracking-tighter tabular-nums sm:text-2xl">
