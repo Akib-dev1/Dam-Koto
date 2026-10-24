@@ -1,4 +1,5 @@
-import { getDB } from "@/lib/mongodb";
+import { getDB } from "@/app/lib/mongodb";
+
 
 export const POST = async (req) => {
   try {
