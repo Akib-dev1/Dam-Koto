@@ -1,7 +1,5 @@
 import { getDB } from "@/app/lib/mongodb";
 
-export const runtime = "nodejs";
-
 export const POST = async (req) => {
   try {
     if (
