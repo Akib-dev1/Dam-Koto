@@ -13,7 +13,7 @@ import {
 } from "react-icons/fi";
 import { useLanguage } from "./LanguageContext";
 
-const PriceDirectory = ({ items = [] }) => {
+const PriceDirectory = ({ items = [], communityReports = [] }) => {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("default");
   const { language } = useLanguage();
@@ -31,12 +31,6 @@ const PriceDirectory = ({ items = [] }) => {
       if (sortBy === "price-low") return a.price_min - b.price_min;
 
       if (sortBy === "price-high") return b.price_max - a.price_max;
-
-      if (sortBy === "people-low")
-        return (a.community_avg ?? Infinity) - (b.community_avg ?? Infinity);
-
-      if (sortBy === "people-high")
-        return (b.community_avg ?? -Infinity) - (a.community_avg ?? -Infinity);
 
       return 0;
     });
@@ -106,8 +100,6 @@ const PriceDirectory = ({ items = [] }) => {
             <option value="name">Name: A to Z</option>
             <option value="price-low">Price: low to high</option>
             <option value="price-high">Price: high to low</option>
-            <option value="people-low">People paying: low to high</option>
-            <option value="people-high">People paying: high to low</option>
           </select>
 
           <FiChevronDown
@@ -244,9 +236,13 @@ const PriceDirectory = ({ items = [] }) => {
                       className="inline-flex items-center gap-2"
                     >
                       <span className="text-3xl font-medium tracking-tighter tabular-nums">
-                        {item.community_avg == null
-                          ? "—"
-                          : `৳${item.community_avg}`}
+                        {(() => {
+                          const report = communityReports.find(
+                            (report) => report.commodity === item.item,
+                          );
+
+                          return report ? `৳${report.average}` : "—";
+                        })()}
                       </span>
 
                       <FiArrowUpRight

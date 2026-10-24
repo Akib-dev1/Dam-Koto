@@ -2,6 +2,7 @@ import PriceDirectory from "@/components/PriceDirectory";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 import { getDB } from "./lib/mongodb";
+import { cacheLife } from "next/cache";
 
 export const metadata = {
   title: "Today's Market Prices in Bangladesh | DamKoto",
@@ -23,9 +24,42 @@ const getPrices = async () => {
   return data?.items || [];
 };
 
+const getCommunityReports = async () => {
+  "use cache";
+
+  const db = await getDB();
+
+  const reports = await db
+    .collection("reports")
+    .aggregate([
+      {
+        $group: {
+          _id: {
+            commodity: "$commodity",
+            unit: "$unit",
+          },
+          average: { $avg: "$price" },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          commodity: "$_id.commodity",
+          unit: "$_id.unit",
+          average: { $round: ["$average", 2] },
+          count: 1,
+        },
+      },
+    ])
+    .toArray();
+
+  return reports;
+};
+
 export default async function HomePage() {
   const items = await getPrices();
-
+  const communityReports = await getCommunityReports();
   const latestDate = items.reduce(
     (latest, item) => (item.report_date > latest ? item.report_date : latest),
     "",
@@ -124,7 +158,7 @@ export default async function HomePage() {
         </section>
 
         {/* Interactive Price Directory */}
-        <PriceDirectory items={items} />
+        <PriceDirectory items={items} communityReports={communityReports} />
 
         {/* Report Price CTA */}
         <section className="mt-12 flex flex-col items-start justify-between gap-6 border-t border-[#E5E5E5] pt-9 sm:flex-row sm:items-center">

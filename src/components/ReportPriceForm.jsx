@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FiArrowRight, FiChevronDown } from "react-icons/fi";
 
 const ReportPriceForm = ({ items = [] }) => {
+  // Debugging line to check the items prop
   const [form, setForm] = useState({
     row_key: "",
     price: "",
@@ -12,6 +13,9 @@ const ReportPriceForm = ({ items = [] }) => {
     purchaseDate: "",
     note: "",
   });
+
+  const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
 
   const [districtOpen, setDistrictOpen] = useState(false);
@@ -88,9 +92,53 @@ const ReportPriceForm = ({ items = [] }) => {
     district.toLowerCase().includes(districtSearch.toLowerCase().trim()),
   );
 
-  const handleSubmit = (e) => {
+  const minPrice = selectedItem?.price_min * 0.7;
+  const maxPrice = selectedItem?.price_max * 1.3;
+
+  const invalidPrice =
+    form.price !== "" &&
+    selectedItem &&
+    (Number(form.price) < minPrice || Number(form.price) > maxPrice);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+
+    if (invalidPrice || !selectedItem || submitting) return;
+
+    setSubmitting(true);
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/reports", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      setMessage(data.message);
+
+      if (res.ok) {
+        setForm({
+          row_key: "",
+          price: "",
+          district: "",
+          marketType: "retail",
+          purchaseDate: "",
+          note: "",
+        });
+
+        setSelectedItem(null);
+        setDistrictSearch("");
+      }
+    } catch {
+      setMessage("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -119,7 +167,7 @@ const ReportPriceForm = ({ items = [] }) => {
             name="row_key"
             value={form.row_key}
             onChange={(e) => {
-              setForm({ ...form, row_key: e.target.value });
+              setForm({ ...form, row_key: e.target.value, price: "" });
               setSelectedItem(
                 items.find((item) => item.row_key === e.target.value),
               );
@@ -144,6 +192,7 @@ const ReportPriceForm = ({ items = [] }) => {
 
       {/* Price and Unit */}
       <div className="mb-5 grid gap-4 sm:grid-cols-3">
+        {/* Price Paid */}
         <div className="sm:col-span-2">
           <label
             htmlFor="price"
@@ -152,10 +201,12 @@ const ReportPriceForm = ({ items = [] }) => {
             02 — Price paid *
           </label>
 
-          <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl">
-              ৳
-            </span>
+          <div
+            className={`flex items-center rounded-sm border bg-white transition-colors focus-within:border-black ${
+              invalidPrice ? "border-red-600" : "border-neutral-200"
+            }`}
+          >
+            <span className="shrink-0 pl-4 text-2xl font-medium">৳</span>
 
             <input
               id="price"
@@ -167,8 +218,28 @@ const ReportPriceForm = ({ items = [] }) => {
               onChange={(e) => setForm({ ...form, price: e.target.value })}
               placeholder="0.00"
               required
-              className="w-full rounded-sm border border-neutral-200 bg-white py-4 pl-11 pr-4 text-4xl font-semibold tracking-tight outline-none placeholder:text-neutral-300 focus:border-black"
+              aria-invalid={!!invalidPrice}
+              className="min-w-0 w-full bg-transparent py-4 pl-2 pr-4 text-4xl font-semibold tracking-tight outline-none placeholder:text-neutral-300"
             />
+          </div>
+
+          {/* Validation Message */}
+          <div className="mt-3" aria-live="polite">
+            {invalidPrice ? (
+              <div className="border-l-2 border-red-600 bg-red-50 px-4 py-3">
+                <p className="text-sm font-semibold text-red-700">
+                  Price outside the accepted range.
+                </p>
+
+                <p className="mt-1 text-xs text-red-600">
+                  Accepted range: ৳{minPrice.toFixed(2)}–৳{maxPrice.toFixed(2)}
+                </p>
+              </div>
+            ) : selectedItem && form.price ? (
+              <p className="text-xs text-neutral-600">
+                Price is within the accepted range.
+              </p>
+            ) : null}
           </div>
         </div>
 
@@ -361,12 +432,22 @@ const ReportPriceForm = ({ items = [] }) => {
       <div className="border-t border-neutral-200 pt-5">
         <button
           type="submit"
-          className="group flex w-full cursor-pointer items-center justify-between rounded-sm border border-black bg-black px-6 py-5 text-sm font-semibold text-white transition-colors duration-300 hover:bg-white hover:text-black"
+          disabled={!selectedItem || invalidPrice || submitting}
+          className="group flex w-full cursor-pointer items-center justify-between rounded-sm border border-black bg-black px-6 py-5 text-sm font-semibold text-white transition-colors duration-300 hover:bg-white hover:text-black disabled:cursor-not-allowed disabled:opacity-40"
         >
-          <span>Submit price report</span>
+          <span>{submitting ? "Submitting..." : "Submit price report"}</span>
 
           <FiArrowRight className="text-xl transition-transform duration-300 group-hover:translate-x-1" />
         </button>
+
+        {message && (
+          <p
+            role="status"
+            className="mt-3 border-l-2 border-black bg-neutral-50 px-4 py-3 text-sm text-neutral-700"
+          >
+            {message}
+          </p>
+        )}
 
         <p className="mt-3 text-xs leading-relaxed text-neutral-500">
           No account required. Your report may be reviewed before appearing

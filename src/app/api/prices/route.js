@@ -21,6 +21,7 @@ export const POST = async (req) => {
         { upsert: true },
       );
     revalidatePath("/"); // Revalidate the home page after updating prices
+    revalidatePath("/report"); // Revalidate the report page after updating prices
     return Response.json({
       success: true,
       message: "Prices updated successfully",
