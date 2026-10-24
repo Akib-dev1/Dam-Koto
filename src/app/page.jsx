@@ -1,0 +1,300 @@
+import PriceDirectory from "@/components/PriceDirectory";
+import Link from "next/link";
+import { FiArrowUpRight } from "react-icons/fi";
+
+const sampleItems = [
+  {
+    row_key: "2026-10-19|চাল সরু (নাজির/মিনিকেট)|প্রতি কেজি",
+    report_date: "2026-10-19",
+    category: "চাল",
+    item: "চাল সরু (নাজির/মিনিকেট)",
+    unit: "প্রতি কেজি",
+    price_min: 70,
+    price_max: 85,
+    week_min: 70,
+    week_max: 85,
+    month_min: 70,
+    month_max: 85,
+    year_min: 72,
+    year_max: 85,
+  },
+  {
+    row_key: "2026-10-19|চাল মাঝারি|প্রতি কেজি",
+    report_date: "2026-10-19",
+    category: "চাল",
+    item: "চাল মাঝারি",
+    unit: "প্রতি কেজি",
+    price_min: 58,
+    price_max: 65,
+    week_min: 58,
+    week_max: 65,
+    month_min: 56,
+    month_max: 64,
+    year_min: 55,
+    year_max: 62,
+  },
+  {
+    row_key: "2026-10-19|আটা (খোলা)|প্রতি কেজি",
+    report_date: "2026-10-19",
+    category: "আটা ও ময়দা",
+    item: "আটা (খোলা)",
+    unit: "প্রতি কেজি",
+    price_min: 42,
+    price_max: 48,
+    week_min: 43,
+    week_max: 49,
+    month_min: 44,
+    month_max: 50,
+    year_min: 45,
+    year_max: 52,
+  },
+  {
+    row_key: "2026-10-19|সয়াবিন তেল (বোতল)|প্রতি লিটার",
+    report_date: "2026-10-19",
+    category: "তেল",
+    item: "সয়াবিন তেল (বোতল)",
+    unit: "প্রতি লিটার",
+    price_min: 175,
+    price_max: 185,
+    week_min: 175,
+    week_max: 185,
+    month_min: 170,
+    month_max: 180,
+    year_min: 165,
+    year_max: 175,
+  },
+  {
+    row_key: "2026-10-19|মসুর ডাল|প্রতি কেজি",
+    report_date: "2026-10-19",
+    category: "ডাল",
+    item: "মসুর ডাল",
+    unit: "প্রতি কেজি",
+    price_min: 125,
+    price_max: 135,
+    week_min: 120,
+    week_max: 130,
+    month_min: 120,
+    month_max: 130,
+    year_min: 115,
+    year_max: 125,
+  },
+  {
+    row_key: "2026-10-19|পেঁয়াজ (দেশি)|প্রতি কেজি",
+    report_date: "2026-10-19",
+    category: "সবজি",
+    item: "পেঁয়াজ (দেশি)",
+    unit: "প্রতি কেজি",
+    price_min: 65,
+    price_max: 75,
+    week_min: 70,
+    week_max: 80,
+    month_min: 60,
+    month_max: 70,
+    year_min: 55,
+    year_max: 65,
+  },
+  {
+    row_key: "2026-10-19|আলু|প্রতি কেজি",
+    report_date: "2026-10-19",
+    category: "সবজি",
+    item: "আলু",
+    unit: "প্রতি কেজি",
+    price_min: 30,
+    price_max: 35,
+    week_min: 30,
+    week_max: 35,
+    month_min: 35,
+    month_max: 40,
+    year_min: 40,
+    year_max: 45,
+  },
+  {
+    row_key: "2026-10-19|ডিম (ফার্ম)|প্রতি হালি",
+    report_date: "2026-10-19",
+    category: "ডিম",
+    item: "ডিম (ফার্ম)",
+    unit: "প্রতি হালি",
+    price_min: 46,
+    price_max: 50,
+    week_min: 44,
+    week_max: 48,
+    month_min: 42,
+    month_max: 46,
+    year_min: 45,
+    year_max: 50,
+  },
+  {
+    row_key: "2026-10-19|ব্রয়লার মুরগি|প্রতি কেজি",
+    report_date: "2026-10-19",
+    category: "মাংস",
+    item: "ব্রয়লার মুরগি",
+    unit: "প্রতি কেজি",
+    price_min: 175,
+    price_max: 190,
+    week_min: 180,
+    week_max: 195,
+    month_min: 170,
+    month_max: 185,
+    year_min: 160,
+    year_max: 180,
+  },
+  {
+    row_key: "2026-10-19|চিনি|প্রতি কেজি",
+    report_date: "2026-10-19",
+    category: "চিনি",
+    item: "চিনি",
+    unit: "প্রতি কেজি",
+    price_min: 110,
+    price_max: 120,
+    week_min: 110,
+    week_max: 120,
+    month_min: 115,
+    month_max: 125,
+    year_min: 120,
+    year_max: 130,
+  },
+];
+
+// Demo values except the first record, which is user-provided.
+async function getPrices() {
+  // Replace with your database or API call.
+  return {
+    items: sampleItems,
+  };
+}
+
+export default async function HomePage() {
+  const { items } = await getPrices();
+
+  const latestDate = items.reduce(
+    (latest, item) => (item.report_date > latest ? item.report_date : latest),
+    "",
+  );
+
+  const formattedDate = latestDate
+    ? new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
+      }).format(new Date(`${latestDate}T00:00:00Z`))
+    : "Not available";
+
+  return (
+    <main className="min-h-screen bg-white text-[#0A0A0A]">
+      <div className="mx-auto max-w-7xl px-4 pb-24 pt-10 sm:px-6 sm:pt-16 lg:px-8 lg:pt-10">
+        {/* Editorial Heading */}
+        <section className="border-b border-[#E5E5E5] pt-4 pb-8 sm:pt-8 sm:pb-12 lg:pb-16">
+          {/* Top Editorial Label */}
+          <div className="mb-10 flex items-center justify-between gap-4 sm:mb-14">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-[#0A0A0A]" />
+
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6B6B6B]">
+                Daily essentials / Bangladesh
+              </p>
+            </div>
+
+            <span className="hidden text-xs font-medium uppercase tracking-[0.15em] text-[#6B6B6B] sm:block">
+              Market index — 2026
+            </span>
+          </div>
+
+          {/* Main Hero */}
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-8">
+            <div className="min-w-0">
+              <h1 className="text-[clamp(4rem,9vw,9rem)] font-semibold leading-[0.86] tracking-[-0.075em]">
+                Today&apos;s
+                <br />
+                <span className="font-normal">prices.</span>
+              </h1>
+
+              <p className="mt-7 max-w-md text-sm leading-relaxed text-[#6B6B6B] sm:mt-10 sm:text-base">
+                Know the market. Compare the numbers.
+                <br className="hidden sm:block" />
+                See what Bangladesh is really paying.
+              </p>
+            </div>
+
+            {/* Oversized Statistic */}
+            <div className="flex items-end justify-between gap-6 border-t border-[#E5E5E5] pt-6 lg:min-w-60 lg:flex-col lg:items-end lg:justify-end lg:border-t-0 lg:pt-0">
+              <div className="order-2 flex flex-col items-end lg:order-1">
+                <span className="text-[clamp(5rem,10vw,9rem)] font-medium leading-[0.8] tracking-[-0.09em] tabular-nums">
+                  {items.length}
+                </span>
+
+                <div className="mt-4 h-px w-16 bg-[#0A0A0A]" />
+              </div>
+
+              <div className="order-1 lg:order-2 lg:mt-6 lg:text-right">
+                <p className="text-xs font-semibold uppercase tracking-[0.15em]">
+                  Tracked essentials
+                </p>
+
+                <p className="mt-2 max-w-45 text-xs leading-relaxed text-[#6B6B6B]">
+                  Current prices & historical comparisons.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Metadata */}
+          <div className="mt-12 flex flex-wrap items-end justify-between gap-5 border-t border-[#E5E5E5] pt-5 sm:mt-16">
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-medium uppercase tracking-[0.12em] text-[#6B6B6B]">
+                Last reported update
+              </span>
+
+              <time
+                dateTime={latestDate}
+                className="text-2xl font-bold tabular-nums"
+              >
+                {formattedDate}
+              </time>
+            </div>
+
+            <div className="text-right">
+              <p className="text-xs font-medium uppercase tracking-[0.12em] text-[#6B6B6B]">
+                Coverage
+              </p>
+
+              <p className="mt-1 text-sm font-semibold">Bangladesh</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Interactive Price Directory */}
+        <PriceDirectory items={items} />
+
+        {/* Report Price CTA */}
+        <section className="mt-12 flex flex-col items-start justify-between gap-6 border-t border-[#E5E5E5] pt-9 sm:flex-row sm:items-center">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-[-0.04em] sm:text-3xl">
+              Paid a different price?
+            </h2>
+
+            <p className="mt-2 text-sm text-[#6B6B6B]">
+              Help others know what things really cost.
+            </p>
+          </div>
+
+          <Link
+            href="/report"
+            className="group relative inline-flex min-h-14 w-full items-center justify-between gap-10 overflow-hidden rounded-sm border border-[#0A0A0A] bg-[#0A0A0A] px-6 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-[#0A0A0A] sm:w-auto sm:min-w-64"
+          >
+            <span className="relative z-10">Report a price</span>
+
+            <span className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-current transition-transform duration-300 group-hover:rotate-45">
+              <FiArrowUpRight size={17} />
+            </span>
+          </Link>
+        </section>
+
+        <p className="mt-12 text-xs leading-relaxed text-[#6B6B6B]">
+          Demo data only. Displayed prices are illustrative and are not verified
+          government or community records.
+        </p>
+      </div>
+    </main>
+  );
+}
