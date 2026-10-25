@@ -5,7 +5,7 @@ export const POST = async (req) => {
   try {
     if (
       !process.env.N8N_API_KEY ||
-      req.headers.get("authorization") !== `Bearer ${process.env.N8N_API_KEY}`
+      req.headers.get("authorization") !== `${process.env.N8N_API_KEY}`
     ) {
       return Response.json({ message: "Unauthorized" }, { status: 401 });
     }
