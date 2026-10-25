@@ -185,8 +185,9 @@ export default async function HomePage() {
         </section>
 
         <p className="mt-12 text-xs leading-relaxed text-[#6B6B6B]">
-          Demo data only. Displayed prices are illustrative and are not verified
-          government or community records.
+          Prices are collected from daily market reports published by the
+          Trading Corporation of Bangladesh (TCB). Community-reported prices are
+          displayed separately and reflect user submissions.
         </p>
       </div>
     </main>
